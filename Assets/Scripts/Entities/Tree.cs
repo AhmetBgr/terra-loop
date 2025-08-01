@@ -8,11 +8,10 @@ public class Tree : Entity
     {
         base.OnReachedEarth(type);
 
-        var nearbyEntities = Earth.instance.GetNearbyEntities(transform.position, GameData.buildingRange, EntityType.Building);
+        var nearbyEntities = Earth.instance.GetNearbyEntities(transform.position, Controller.instance.buildingRange, EntityType.Building);
 
         foreach (var entity in nearbyEntities)
         {
-            Debug.LogError($"Tree reached Earth, affecting building: {entity.name}");
             Building building = entity as Building;
             Controller.instance.AddScore(building.activeWindowsCount * 5, this);
         }
@@ -24,8 +23,7 @@ public class Tree : Entity
         if (!isPlaced)
             return;
 
-        var nearbyEntities = Earth.instance.GetNearbyEntities(transform.position, GameData.buildingRange, EntityType.Building);
-        Debug.Log($"Tree destroyed, affecting building: {nearbyEntities.Count}");
+        var nearbyEntities = Earth.instance.GetNearbyEntities(transform.position, Controller.instance.buildingRange, EntityType.Building);
 
         foreach (var entity in nearbyEntities)
         {

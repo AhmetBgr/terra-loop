@@ -24,6 +24,8 @@ public class InputController : Singleton<InputController>, IBeginDragHandler, IE
 
     protected override void Awake()
     {
+        base.Awake();
+
         _graphicRaycaster = GetComponent<GraphicRaycaster>();
         _graphicRaycaster.enabled = true;
         Input.multiTouchEnabled = _multiTouchEnabled;

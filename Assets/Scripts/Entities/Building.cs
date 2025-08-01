@@ -16,7 +16,7 @@ public class Building : Entity
     {
         base.OnReachedEarth(type);
 
-        var nearbyEntities = Earth.instance.GetNearbyEntities(transform.position, GameData.buildingRange, EntityType.Human);
+        var nearbyEntities = Earth.instance.GetNearbyEntities(transform.position, Controller.instance.buildingRange, EntityType.Human);
 
         foreach (var entity in nearbyEntities)
         {
@@ -41,7 +41,7 @@ public class Building : Entity
         windows.RemoveAt(0);
 
         human.MoveTowards(parent, 0.5f, onComplete: () => {
-            var nearbyTrees = Earth.instance.GetNearbyEntities(transform.position, GameData.buildingRange, EntityType.Tree);
+            var nearbyTrees = Earth.instance.GetNearbyEntities(transform.position, Controller.instance.buildingRange, EntityType.Tree);
             foreach (var entity in nearbyTrees)
             {
                 Controller.instance.AddScore(5, entity);
@@ -69,7 +69,7 @@ public class Building : Entity
         if (!isPlaced)
             return;
 
-        var nearbyTrees = Earth.instance.GetNearbyEntities(transform.position, GameData.buildingRange, EntityType.Tree);
+        var nearbyTrees = Earth.instance.GetNearbyEntities(transform.position, Controller.instance.buildingRange, EntityType.Tree);
 
         Controller.instance.AddScore(-activeWindowsCount * (4 + nearbyTrees.Count), this);
     }

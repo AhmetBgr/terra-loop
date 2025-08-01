@@ -18,19 +18,30 @@ public class Controller : Singleton<Controller>
     public Transform targetTransform;
     public float moveDownspeed = 300;
     public GameState gameState = GameState.WaitingToStart;
+
+    private string scoreKey = "Score";
+    private string highScoreKey = "HighScore";
+
+    public float buildingRange = 0.3f;
+    public float treeRange = 0.2f;
+    public float remainingTime = 5f;
+
     public static event Action GameEnded;
+
+
     void Start()
     {
         InputController.PointerDown += OnPointerDown;
 
         score = 0;
         InGamePanel.instance.UpdateScore(0, 0);
-        InGamePanel.instance.UpdateTimer(GameData.remainingTime);
+        InGamePanel.instance.UpdateTimer(remainingTime);
     }
 
     private void OnDestroy()
     {
         InputController.PointerDown -= OnPointerDown;
+        DOTween.KillAll();
 
     }
     public void StartTimer()
@@ -39,16 +50,23 @@ public class Controller : Singleton<Controller>
     }
     public IEnumerator Timer()
     {
-        while (GameData.remainingTime > 0)
+        while (remainingTime > 0)
         {
-            GameData.remainingTime -= Time.deltaTime;
+            remainingTime -= Time.deltaTime;
 
-            InGamePanel.instance.UpdateTimer(GameData.remainingTime);
+            InGamePanel.instance.UpdateTimer(remainingTime);
             yield return null;
         }
+        PlayerPrefs.SetInt(scoreKey, score);
+        int highScore = PlayerPrefs.GetInt(highScoreKey, 0);
+        PlayerPrefs.SetInt(highScoreKey, score > highScore ? score: highScore);
 
         ChangeGameState(GameState.Ended);
         GameEnded?.Invoke();
+    }
+    public int GetHighScore()
+    {
+        return PlayerPrefs.GetInt(highScoreKey, 0);
     }
     public void ChangeGameState(GameState state)
     {
@@ -119,8 +137,6 @@ public class Controller : Singleton<Controller>
 
 public static class GameData
 {
-    public static float buildingRange = 0.3f;
-    public static float treeRange = 0.2f;
-    public static float remainingTime = 120f; 
+
 
 }

@@ -30,7 +30,7 @@ public class Human : Entity
 
         Controller.instance.AddScore(1, this);
 
-        var nearbyEntities = Earth.instance.GetNearbyEntities(transform.position, GameData.buildingRange, EntityType.Building);
+        var nearbyEntities = Earth.instance.GetNearbyEntities(transform.position, Controller.instance.buildingRange, EntityType.Building);
 
         Entity closestbuilding = null;
         foreach (var entity in nearbyEntities)

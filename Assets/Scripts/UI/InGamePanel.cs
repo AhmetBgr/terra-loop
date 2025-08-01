@@ -21,7 +21,7 @@ public class InGamePanel : Singleton<InGamePanel>
 
     public void UpdateScore(int score, int curScore)
     {
-        DOVirtual.Float(curScore, score, 0.5f, (value) =>
+        DOVirtual.Float(curScore, score, 0.25f * Mathf.Abs(score-curScore), (value) =>
         {
             scoreText.text = ((int)value).ToString();
         }).SetDelay(1f);

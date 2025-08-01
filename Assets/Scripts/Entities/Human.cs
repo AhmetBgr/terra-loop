@@ -19,17 +19,16 @@ public class Human : Entity
 
         Controller.instance.AddScore(-1, this);
     }
+    protected override void OnTriggerEnter2D(Collider2D other)
+    {
+
+        base.OnTriggerEnter2D(other);
+    }
     public override void OnReachedEarth(EntityType type)
     {
         base.OnReachedEarth(type);
 
         Controller.instance.AddScore(1, this);
-
-        //var nearbyTrees = Earth.instance.GetNearbyEntities(transform.position, GameData.buildingRange, EntityType.Tree);
-        //foreach (var entity in nearbyTrees)
-        //{
-        //    Controller.instance.AddScore(1);
-        //}
 
         var nearbyEntities = Earth.instance.GetNearbyEntities(transform.position, GameData.buildingRange, EntityType.Building);
 

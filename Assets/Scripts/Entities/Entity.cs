@@ -73,7 +73,7 @@ public class Entity : MonoBehaviour
             CheckForDestroy(other);
         }
     }
-    private void OnGameEnded()
+    protected void OnGameEnded()
     {
         if (!isPlaced)
         {

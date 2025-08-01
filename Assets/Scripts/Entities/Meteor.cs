@@ -46,6 +46,19 @@ public class Meteor : Entity
             CheckForDestroy(other);
         }
     }
+
+    private void OnTriggerStay2D(Collider2D other)
+    {
+        Debug.Log("here 0: " + other.gameObject.name);
+
+        if (other.CompareTag("EarthGF"))
+        {
+            Debug.Log("here");
+            Vector2 dir = (Earth.instance.transform.position - transform.position).normalized; 
+            rb.AddForce(dir * 0.3f);
+        }
+
+    }
     public override void OnReachedEarth(EntityType type)
     {
 
@@ -54,22 +67,6 @@ public class Meteor : Entity
 
         DOVirtual.DelayedCall(0.002f, () =>
         {
-            var crater = Instantiate(craterPrefab, Earth.instance.entityHolder);
-            crater.transform.localPosition = Vector3.zero;
-
-            /*crater.transform.LookAt(transform.position);
-
-            float angle = -crater.transform.localRotation.eulerAngles.x;
-            if (transform.position.x < 0)
-            {
-                //angle = 90 - angle;
-            }
-
-            crater.transform.localRotation = Quaternion.Euler(0f, 0f, angle);*/
-
-            Vector2 direction = transform.position - crater.transform.position;
-            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-            crater.transform.rotation = Quaternion.Euler(0f, 0f, angle);
 
             //crater.transform.localRotation = parent.localRotation;
 
@@ -79,15 +76,33 @@ public class Meteor : Entity
         //crater.transform.localRotation = parent.localRotation; // Quaternion.Euler(0f, 0f, parent.localRotation.eulerAngles.z -0);
         //Debug.LogWarning("meteor parent rotation: " + parent.localRotation.eulerAngles);
         //Debug.LogWarning("crater parent rotation: " + crater.transform.localRotation.eulerAngles);
+        var crater = Instantiate(craterPrefab, Earth.instance.entityHolder);
+        crater.transform.localPosition = Vector3.zero;
 
-        //DestroyEntity();
+        /*crater.transform.LookAt(transform.position);
+
+        float angle = -crater.transform.localRotation.eulerAngles.x;
+        if (transform.position.x < 0)
+        {
+            //angle = 90 - angle;
+        }
+
+        crater.transform.localRotation = Quaternion.Euler(0f, 0f, angle);*/
+
+        Vector2 direction = transform.position - crater.transform.position;
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        crater.transform.rotation = Quaternion.Euler(0f, 0f, angle);
+
+        DestroyEntity();
     }
 
-    public void Move(Vector2 targetPos)
+    public void Move(Vector3 targetPos)
     {
         parent = transform.parent;
 
-       moveTween = parent.DOMove(targetPos, 10f)/*.OnComplete(() => DestroyEntity())*/;
+        rb.AddForce((targetPos - transform.position).normalized * Random.Range(70, 130));
+        moveTween = DOVirtual.DelayedCall(20f, () => { DestroyEntity(); });
+        //moveTween = parent.DOMove(targetPos, 10f)/*.OnComplete(() => DestroyEntity())*/;
     }
     public override void CheckForDestroy(Collider2D other)
     {

@@ -58,15 +58,7 @@ public class Entity : MonoBehaviour
     {
         if (!isPlaced && other.TryGetComponent(out Earth earth))
         {
-            parent.DOKill(other);
-            rb.velocity = Vector2.zero;
-            rb.bodyType = RigidbodyType2D.Kinematic;
-            Vector3 pos = transform.position;
-            parent.SetParent(earth.entityHolder);
-            parent.localPosition = Vector3.zero;
-            transform.position = pos;
-            earth.AddEntity(this);
-            OnReachedEarth(entityType);
+
         }
         else
         {
@@ -95,9 +87,22 @@ public class Entity : MonoBehaviour
         Destroy(parent.gameObject);
     }
 
-    public void MoveDown(float speed)
+    public void MoveDown(Vector3 position, float speed)
     {
-        rb.AddForce(Vector2.down * speed, ForceMode2D.Force);
+        transform.DOMove(position, 0.2f).OnComplete(() => {
+
+            parent.DOKill();
+            rb.velocity = Vector2.zero;
+            rb.bodyType = RigidbodyType2D.Kinematic;
+            Vector3 pos = transform.position;
+            parent.SetParent(Earth.instance.entityHolder);
+            parent.localPosition = Vector3.zero;
+            transform.position = pos;
+            Earth.instance.AddEntity(this);
+            OnReachedEarth(entityType);
+        });
+
+        //rb.AddForce(Vector2.down * speed, ForceMode2D.Force);
         col.enabled = true;
 
     }

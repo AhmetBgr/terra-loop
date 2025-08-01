@@ -6,6 +6,8 @@ using UnityEngine;
 public class ScoreBubbleSpawner : Singleton<ScoreBubbleSpawner>
 {
     public GameObject scoreBubblePrefab;
+    public GameObject negativeScoreBubblePrefab;
+
 
     public Transform targetTransform;
 
@@ -34,46 +36,31 @@ public class ScoreBubbleSpawner : Singleton<ScoreBubbleSpawner>
     }
     */
 
-    public void SpawnScoreBubble(Entity entity)
+    public void SpawnScoreBubble(Vector3 spawnPosition, Color color)
     {
         if (scoreBubblePrefab == null) return;
 
-        Vector3 spawnPosition = entity.scoreBubbleSpawnTransform.position;
         spawnPosition.z = 0;
         Transform bubble = Instantiate(scoreBubblePrefab, spawnPosition, Quaternion.identity).transform;
         SpriteRenderer bubbleSprite = bubble.GetComponent<SpriteRenderer>();
-        Color color =  entity.color;
-
-        /*if(entity.entityType == EntityType.Human)
-        {
-            color = Color.white;
-        }
-        else if (entity.entityType == EntityType.Building)
-        {
-            color = Color.gray;
-        }
-        else if (entity.entityType == EntityType.Tree)
-        {
-            color = Color.green;
-        }*/
 
         bubbleSprite.color = color;
 
-        // Get the screen position of the UI element
-        /*Vector3 screenPos = RectTransformUtility.WorldToScreenPoint(Camera.main, targetTransform.position); // null because Screen Space - Overlay
+        MoveInArc2(bubble, targetTransform.position);
+    }
+    public void SpawnNegativeScoreBubble(Vector3 spawnPosition, Color color)
+    {
+        if (scoreBubblePrefab == null) return;
 
-        // Convert screen position to world point
-        Vector3 worldTargetPos = Camera.main.ScreenToWorldPoint(new Vector3(screenPos.x, screenPos.y, Camera.main.nearClipPlane + 5f)); // Adjust Z depth
+        spawnPosition.z = 0;
+        Transform bubble = Instantiate(negativeScoreBubblePrefab, spawnPosition, Quaternion.identity).transform;
+        SpriteRenderer bubbleSprite = bubble.GetComponent<SpriteRenderer>();
 
-        worldTargetPos.z = 0; // Optional: Lock to 2D plane*/
-
-        /*Debug.Log($"Target world position for bubble: {targetTransform.position}");
-        bubble.DOMove(targetTransform.position, 1f) // Adjust timing here
-            .SetEase(Ease.InCubic)
-            .OnComplete(() => Destroy(bubble.gameObject));*/
+        bubbleSprite.color = color;
 
         MoveInArc2(bubble, targetTransform.position);
     }
+
 
     void MoveInArc(Transform item, Vector3 endPos)
     {

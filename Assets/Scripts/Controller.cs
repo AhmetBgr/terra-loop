@@ -15,6 +15,7 @@ public class Controller : Singleton<Controller>
     public int score = 0;
 
     public EntityQueue EntityQueue;
+    public Transform targetTransform;
     public float moveDownspeed = 300;
     public GameState gameState = GameState.WaitingToStart;
     public static event Action GameEnded;
@@ -72,7 +73,7 @@ public class Controller : Singleton<Controller>
 
         if (entity == null) return;
 
-        entity.MoveDown(moveDownspeed);
+        entity.MoveDown(targetTransform.position, moveDownspeed);
 
     }
 
@@ -86,18 +87,31 @@ public class Controller : Singleton<Controller>
         if (relatedEntity != null) { 
             relatedEntity.ScoreAdded += amount;
 
-            if(amount > 0)
+            if (amount > 0)
             {
                 for (int i = 0; i < amount; i++)
                 {
+                    var pos = relatedEntity.scoreBubbleSpawnTransform.position;
+                    var color = relatedEntity.color;
                     DOVirtual.DelayedCall(i * 0.1f + 0.3f, () =>
                     {
 
-                        ScoreBubbleSpawner.instance.SpawnScoreBubble(relatedEntity);
+                        ScoreBubbleSpawner.instance.SpawnScoreBubble(relatedEntity.scoreBubbleSpawnTransform.position, color);
 
                     });
                 }
 
+            }
+            else if (amount < 0){
+                for (int i = 0; i < -amount; i++)
+                {
+                    var pos = relatedEntity.scoreBubbleSpawnTransform.position;
+                    DOVirtual.DelayedCall(i * 0.005f + 0.005f, () =>
+                    {
+                        ScoreBubbleSpawner.instance.SpawnNegativeScoreBubble(pos, Color.red);
+
+                    });
+                }
             }
         }
     }
@@ -107,6 +121,6 @@ public static class GameData
 {
     public static float buildingRange = 0.3f;
     public static float treeRange = 0.2f;
-    public static float remainingTime = 180f; 
+    public static float remainingTime = 120f; 
 
 }

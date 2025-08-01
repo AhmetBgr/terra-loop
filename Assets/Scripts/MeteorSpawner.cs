@@ -23,7 +23,7 @@ public class MeteorSpawner : MonoBehaviour
     }
     private IEnumerator SpawnLoop()
     {
-        yield return new WaitForSeconds(Random.Range(1, 5));
+        yield return new WaitForSeconds(Random.Range(5, 50));
 
         Transform meteor = Instantiate(meteorPrefab, GetRandomSpawnPosition(spawnBoxes), Quaternion.identity).transform; 
 

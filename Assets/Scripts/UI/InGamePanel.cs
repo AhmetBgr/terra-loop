@@ -10,6 +10,8 @@ public class InGamePanel : Singleton<InGamePanel>
     public TextMeshProUGUI timerText;
     public CanvasGroup canvasGroup;
 
+    private int displayedScore = 0;
+    Tween scoreTween;
     void Start()
     {
         Controller.GameEnded += OnGameEnded;
@@ -21,10 +23,12 @@ public class InGamePanel : Singleton<InGamePanel>
 
     public void UpdateScore(int score, int curScore)
     {
-        DOVirtual.Float(curScore, score, 0.25f * Mathf.Abs(score-curScore), (value) =>
+        scoreTween.Kill();
+        scoreTween = DOVirtual.Float(displayedScore, score, 0.2f * Mathf.Abs(score-displayedScore), (value) =>
         {
             scoreText.text = ((int)value).ToString();
-        }).SetDelay(1f);
+            displayedScore = score;
+        }).SetDelay(0.5f);
 
         //scoreText.text = score.ToString();
     }

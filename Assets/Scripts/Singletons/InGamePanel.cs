@@ -33,7 +33,7 @@ public class InGamePanel : Singleton<InGamePanel>
         scoreTween.Kill();
         float dur = 0.1f + 0.1f * Mathf.Abs(score - displayedScore);
         float delay = 0f;
-        if (score > displayedScore)
+        if (score > curScore)
         {
             scoreText.transform.DOKill();
             scoreText.transform.DOScale(1.2f, dur).SetDelay(delay).OnComplete( () => {
@@ -42,7 +42,7 @@ public class InGamePanel : Singleton<InGamePanel>
             scoreText.color = Color.white;
 
         }
-        else if (score < displayedScore)
+        else if (score < curScore)
         {
             scoreText.DOKill();
 

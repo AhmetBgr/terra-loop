@@ -9,7 +9,7 @@ public class ScoreBubbleSpawner : Singleton<ScoreBubbleSpawner>
     public GameObject scoreBubblePrefab;
     public GameObject negativeScoreBubblePrefab;
 
-
+    public Camera camera;
     public Transform targetTransform;
 
     /*public void SpawnScoreBubble(Vector3 position)
@@ -47,7 +47,7 @@ public class ScoreBubbleSpawner : Singleton<ScoreBubbleSpawner>
 
         bubbleSprite.color = color;
 
-        MoveInArc2(bubble, targetTransform.position, onComplete);
+        MoveInArc2(bubble, camera.ScreenToWorldPoint(targetTransform.position), onComplete);
 
         SoundController.instance.PlayAudio(SoundController.instance.scoreGain);
 
@@ -62,9 +62,9 @@ public class ScoreBubbleSpawner : Singleton<ScoreBubbleSpawner>
 
         bubbleSprite.color = color;
 
-        MoveInArc2(bubble, targetTransform.position, onComplete);
+        MoveInArc2(bubble, camera.ScreenToWorldPoint(targetTransform.position), onComplete);
 
-        //SoundController.instance.PlayAudio(SoundController.instance.scoreLose);
+        SoundController.instance.PlayAudio(SoundController.instance.scoreLose);
     }
 
 

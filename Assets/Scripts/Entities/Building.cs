@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,6 +7,9 @@ public class Building : Entity
 {
     public List<SpriteRenderer> windows = new List<SpriteRenderer>();
     private List<SpriteRenderer> activeWindows = new List<SpriteRenderer>();
+
+    private List<Human> humansInProgress = new List<Human>();
+
 
     public Color lightOn;
     public Color lightOff;
@@ -35,12 +39,15 @@ public class Building : Entity
     {
         if (human == null || windows.Count == 0) return;
 
-        human.col.enabled = false;
-        var window = windows[0];
-        activeWindows.Add(window);
-        windows.RemoveAt(0);
+        if (humansInProgress.Count == windows.Count) return;
+
+        humansInProgress.Add(human);
 
         human.MoveTowards(parent, 0.5f, onComplete: () => {
+            var window = windows[Random.Range(0, windows.Count)];
+            activeWindows.Add(window);
+            windows.Remove(window);
+
             var nearbyTrees = Earth.instance.GetNearbyEntities(transform.position, Controller.instance.buildingRange, EntityType.Tree);
             foreach (var entity in nearbyTrees)
             {
@@ -52,19 +59,27 @@ public class Building : Entity
             window.color = lightOn;
 
             human.parent.parent = parent;
-            Debug.LogWarning("here2");
             human.parent.gameObject.SetActive(false);
+
+            human.isActive = false;
+
+            humansInProgress.Remove(human);
+            Earth.instance.entities.Remove(human);
+
+            if (windows.Count == 0)
+                isActive = false;
+
         });
 
-        human.isActive = false;
-
-
-        //if(windows.Count == 0)
-            //isActive = false;
     }
 
     protected override void OnDestroy()
     {
+        foreach (var entity in humansInProgress)
+        {
+            entity.parent.DOKill();
+        }
+
         base.OnDestroy();
 
         if (!isPlaced)

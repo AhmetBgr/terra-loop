@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -16,6 +17,8 @@ public class SoundController : Singleton<SoundController>
     public SoundEffect entityDestroyed;
     public SoundEffect entityPlaced;
     public SoundEffect entityFall;
+    public SoundEffect levelComplete;
+
 
 
     protected override void Awake()
@@ -53,16 +56,28 @@ public class SoundController : Singleton<SoundController>
 
         return audioSource;
     }
-    public void PlayAudio(SoundEffect soundEffect)
+    public void PlayAudio(SoundEffect soundEffect, float delay = 0f)
     {
+        
+
         if (!_isOn)
             return;
 
         if (!soundEffect)
             return;
 
+        if(delay > 0)
+        {
+            DOVirtual.DelayedCall(delay, () =>
+            {
+                AudioSource audioSource = GetFreeAudioSource();
+                soundEffect.Play(audioSource);
+            });
+            return;
+        }
         AudioSource audioSource = GetFreeAudioSource();
         soundEffect.Play(audioSource);
+
     }
 
     public IEnumerator FadeOutSound(AudioSource source, float dur, float delay)

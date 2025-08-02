@@ -5461,12 +5461,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   entityType: 3
+  view: {fileID: 7779608546561106375}
   rb: {fileID: 4480832875708266756}
   rangeTransform: {fileID: 7761831393689071195}
   scoreBubbleSpawnTransform: {fileID: 413140135238539639}
+  fallSFX: {fileID: 0}
+  destroyedSFX: {fileID: 11400000, guid: 9ae2199f5c6337f46b14fe08eab2a651, type: 2}
   color: {r: 1, g: 0.86689913, b: 0.7216981, a: 1}
   isActive: 1
   parent: {fileID: 0}
   col: {fileID: 9135593245298404433}
   ScoreAdded: 0
+  meteorImpact: {fileID: 11400000, guid: 9cacd4030cce518498a3015c59a0438d, type: 2}
   craterPrefab: {fileID: 4821829848957761391, guid: cd517e43b3c5b2545b38e43a2dd4eb47, type: 3}

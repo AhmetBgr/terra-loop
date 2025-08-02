@@ -12,14 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbf1450f35e74834eb3b87840f9d429b, type: 3}
   m_Name: MeteorImpact
   m_EditorClassIdentifier: 
-  clips: []
+  clips:
+  - {fileID: 8300000, guid: 155a953377fd36e4b8ccaab3631de639, type: 3}
   useRandomVolume: 0
-  volume: 1
+  volume: 0.03
   volumeRandom: {x: 0.5, y: 0.5}
   useRandomPitch: 0
-  pitch: 1
+  pitch: 3
   pitchRandom: {x: 1, y: 1}
-  playOrder: 0
+  playOrder: 1
   playIndex: 0
   loop: 0
   source: {fileID: 0}

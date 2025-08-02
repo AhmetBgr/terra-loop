@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: BuildingFall
   m_EditorClassIdentifier: 
   clips:
-  - {fileID: 8300000, guid: a9668bd7e641fdd40831e702928e60a4, type: 3}
+  - {fileID: 8300000, guid: 764ad2e0a1535114c82871fe568b2d32, type: 3}
   useRandomVolume: 0
-  volume: 0.161
+  volume: 1
   volumeRandom: {x: 0.5, y: 0.5}
   useRandomPitch: 0
-  pitch: 3
-  pitchRandom: {x: 3, y: 5}
+  pitch: 2
+  pitchRandom: {x: 2.5, y: 3}
   playOrder: 0
   playIndex: 0
   loop: 0

@@ -6,6 +6,7 @@ using static UnityEngine.GraphicsBuffer;
 
 public class Meteor : Entity
 {
+    public SoundEffect meteorImpact;
     public GameObject craterPrefab;
     Tween moveTween;
     protected override IEnumerator Start()
@@ -49,11 +50,8 @@ public class Meteor : Entity
 
     private void OnTriggerStay2D(Collider2D other)
     {
-        Debug.Log("here 0: " + other.gameObject.name);
-
         if (other.CompareTag("EarthGF"))
         {
-            Debug.Log("here");
             Vector2 dir = (Earth.instance.transform.position - transform.position).normalized; 
             rb.AddForce(dir * 0.25f);
         }
@@ -97,6 +95,9 @@ public class Meteor : Entity
     }
     public override void DestroyEntity()
     {
+        SoundController.instance.PlayAudio(destroyedSFX);
+        SoundController.instance.PlayAudio(meteorImpact);
+
         Earth.instance.entities.Remove(this);
 
         var particle = ParticleSpawner.instance.SpawnParticle(ParticleSpawner.instance.destoryPrefab2, transform.position);
@@ -107,10 +108,14 @@ public class Meteor : Entity
     }
     public void Move(Vector3 targetPos)
     {
+        var scale = view.localScale;
+        view.localScale = Vector3.zero;
+        view.DOScale(scale, 1f);
+
         parent = transform.parent;
 
         rb.AddForce((targetPos - transform.position).normalized * Random.Range(10, 30));
-        moveTween = DOVirtual.DelayedCall(40f, () => { DestroyEntity(); });
+        moveTween = DOVirtual.DelayedCall(40f, () => { Destroy(parent.gameObject); });
         //moveTween = parent.DOMove(targetPos, 10f)/*.OnComplete(() => DestroyEntity())*/;
     }
     public override void CheckForDestroy(Collider2D other)

@@ -17,6 +17,7 @@ public enum EntityType
 public class Entity : MonoBehaviour
 {
     public EntityType entityType;
+    public Transform view;
     public Rigidbody2D rb;
     public Transform rangeTransform;
     public Transform scoreBubbleSpawnTransform;
@@ -47,6 +48,12 @@ public class Entity : MonoBehaviour
 
 
         yield return new WaitForSeconds(1);
+
+        if(Controller.instance.gameState == GameState.Ended)
+        {
+            OnGameEnded();
+
+        }
     }
     protected virtual void OnDestroy()
     {
@@ -77,6 +84,7 @@ public class Entity : MonoBehaviour
             parent.DOScale(Vector3.zero, 0.5f)
                 .SetEase(Ease.InBack)
                 .OnComplete(() => {
+                    Destroy(parent.gameObject);
                     //DestroyEntity();
                 });
         }
@@ -121,16 +129,23 @@ public class Entity : MonoBehaviour
         isPlaced = true;
         ReachedEarth?.Invoke(entityType);
         PlayRangeEffect();
-        //SoundController.instance.PlayAudio(SoundController.instance.entityPlaced);
+        SoundController.instance.PlayAudio(SoundController.instance.entityPlaced);
 
     }
     public void MoveTowards(Transform entityParent, float delay = 0f,UnityAction onComplete = null)
     {
+        col.enabled = false;
+        isActive = false;
+
+
         parent.DOLocalRotate(entityParent.localRotation.eulerAngles, 20f)
+            .OnKill( () => {
+                col.enabled = true;
+                isActive = true;
+            })
             .SetDelay(delay)
             .SetSpeedBased()
             .OnComplete(() => {
-                isActive = false; 
                 onComplete?.Invoke();
             });
     }

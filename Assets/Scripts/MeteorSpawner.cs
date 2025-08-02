@@ -13,13 +13,30 @@ public class MeteorSpawner : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        StartSpawnLoop();
+        //StartSpawnLoop();
         Controller.GameEnded += OnGameEnded;
+        Controller.EntityFell += TrySpawnMeteor;
     }
     private void OnDestroy()
     {
         Controller.GameEnded -= OnGameEnded;
+        Controller.EntityFell -= TrySpawnMeteor;
 
+    }
+
+    private void TrySpawnMeteor()
+    {
+        int rand = Random.Range(0, 30);
+
+        if (rand != 0) return;
+
+        Transform meteor = Instantiate(meteorPrefab, GetRandomSpawnPosition(spawnBoxes), Quaternion.identity).transform;
+
+        Vector3 targetPos = GetRandomSpawnPosition(targetBoxes);
+
+
+
+        meteor.GetComponentInChildren<Meteor>().Move(targetPos);
     }
 
     private void OnGameEnded()
@@ -33,7 +50,7 @@ public class MeteorSpawner : MonoBehaviour
     }
     private IEnumerator SpawnLoop()
     {
-        yield return new WaitForSeconds(Random.Range(10, 50));
+        yield return new WaitForSeconds(Random.Range(5, 10));
 
         Transform meteor = Instantiate(meteorPrefab, GetRandomSpawnPosition(spawnBoxes), Quaternion.identity).transform; 
 

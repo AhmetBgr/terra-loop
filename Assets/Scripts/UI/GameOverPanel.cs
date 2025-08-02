@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -18,10 +19,18 @@ public class GameOverPanel : MonoBehaviour
         restartButton.onClick.AddListener(() => SceneLoader.Instance.ReloadCurrentScene());
 
     }
-    private void OnEnable()
+    private void Update()
     {
         scoreText.text = Controller.instance.score.ToString();
         highScoreText.text = "Highest \n" + Controller.instance.GetHighScore().ToString();
 
+    }
+    private void OnEnable()
+    {
+        restartButton.interactable = false;
+        scoreText.text = Controller.instance.score.ToString();
+        highScoreText.text = "Highest \n" + Controller.instance.GetHighScore().ToString();
+
+        DOVirtual.DelayedCall(2f, () => { restartButton.interactable = true; });
     }
 }

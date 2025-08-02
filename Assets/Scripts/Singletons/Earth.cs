@@ -6,20 +6,24 @@ using UnityEngine;
 public class Earth : Singleton<Earth>
 {
     public List<Entity> entities = new List<Entity>();
-    public float rotationSpeed = 36f; // 360 degrees in 10 seconds
-    private float defRotationSpeed = 36f; // 360 degrees in 10 seconds
+    private float rotationSpeed = 30f; // 360 degrees in 10 seconds
+    private float defRotationSpeed = 30f; // 360 degrees in 10 seconds
     public Transform entityHolder;
 
     private float speedupRotationSpeed = 36f; // 360 degrees in 10 seconds
 
+    protected override void Awake()
+    {
+        base.Awake();
+
+    }
     void Start()
     {
         /*transform.DORotate(new Vector3(0, 0, 360), 10f, RotateMode.FastBeyond360)
             .SetEase(Ease.Linear)
             .SetLoops(-1);*/
-
-        speedupRotationSpeed = rotationSpeed * 5; // Double the speed for speedup
-        defRotationSpeed = rotationSpeed; // Store the default speed
+        speedupRotationSpeed = defRotationSpeed * 5; // Double the speed for speedup
+        //defRotationSpeed = rotationSpeed; // Store the default speed
 
         Controller.GameEnded += OnGameEnded;
     }
@@ -29,19 +33,28 @@ public class Earth : Singleton<Earth>
     }
     void Update()
     {
-        if (Controller.instance.gameState == GameState.Ended) {
+        if (Controller.instance.gameState == GameState.Ended /*|| Controller.instance.gameState == GameState.WaitingToStart*/)
+        {
             rotationSpeed = defRotationSpeed / 5;
         }
-
-        if (Input.GetMouseButtonDown(1))
-        {
-            rotationSpeed = speedupRotationSpeed;
-        }
-        if (Input.GetMouseButtonUp(1))
+       /* else
         {
             rotationSpeed = defRotationSpeed;
         }
+       */
+        if (Input.GetMouseButtonDown(1))
+        {
+            rotationSpeed = speedupRotationSpeed;
+            Debug.Log("here: " + rotationSpeed);
 
+        }
+        if (Input.GetMouseButtonUp(1))
+        {
+            Debug.Log("here2");
+
+            rotationSpeed = defRotationSpeed;
+        }
+        
         // Rotate around Z axis
         transform.Rotate(0, 0, rotationSpeed * Time.deltaTime);
 

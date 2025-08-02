@@ -12,13 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbf1450f35e74834eb3b87840f9d429b, type: 3}
   m_Name: EntityDestroyed
   m_EditorClassIdentifier: 
-  clips: []
+  clips:
+  - {fileID: 8300000, guid: 244b028d4e619d6458e2b28809db2351, type: 3}
   useRandomVolume: 0
-  volume: 1
+  volume: 0.357
   volumeRandom: {x: 0.5, y: 0.5}
-  useRandomPitch: 0
+  useRandomPitch: 1
   pitch: 1
-  pitchRandom: {x: 1, y: 1}
+  pitchRandom: {x: 0.5, y: 1}
   playOrder: 0
   playIndex: 0
   loop: 0

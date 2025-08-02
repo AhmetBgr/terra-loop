@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbf1450f35e74834eb3b87840f9d429b, type: 3}
+  m_Name: LevelComplete
+  m_EditorClassIdentifier: 
+  clips:
+  - {fileID: 8300000, guid: 60aa88f92312ba245aec631cbc3c55b2, type: 3}
+  useRandomVolume: 0
+  volume: 1
+  volumeRandom: {x: 0.5, y: 0.5}
+  useRandomPitch: 0
+  pitch: 0.6
+  pitchRandom: {x: 1, y: 1}
+  playOrder: 0
+  playIndex: 0
+  loop: 0
+  source: {fileID: 0}

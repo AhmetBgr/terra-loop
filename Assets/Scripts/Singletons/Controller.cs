@@ -27,8 +27,11 @@ public class Controller : Singleton<Controller>
     public float remainingTime = 120f;
     public int moveCount = 100;
 
+    int highScore;
 
     public static event Action GameEnded;
+    public static event Action EntityFell;
+
 
 
     void Start()
@@ -63,7 +66,7 @@ public class Controller : Singleton<Controller>
     }
     public int GetHighScore()
     {
-        return PlayerPrefs.GetInt(highScoreKey, 0);
+        return  score > highScore ? score : highScore;
     }
     public void ChangeGameState(GameState state)
     {
@@ -93,7 +96,7 @@ public class Controller : Singleton<Controller>
         moveCount--;
 
         InGamePanel.instance.UpdateTimer(moveCount);
-
+        EntityFell?.Invoke();
         if(moveCount == 0)
         {
             EndGame();
@@ -103,17 +106,19 @@ public class Controller : Singleton<Controller>
 
     public void EndGame()
     {
+        SoundController.instance.PlayAudio(SoundController.instance.levelComplete, 0.4f);
         PlayerPrefs.SetInt(scoreKey, score);
-        int highScore = PlayerPrefs.GetInt(highScoreKey, 0);
-        PlayerPrefs.SetInt(highScoreKey, score > highScore ? score : highScore);
-
+        highScore = PlayerPrefs.GetInt(highScoreKey, 0);
+        highScore = score > highScore ? score : highScore;
+        PlayerPrefs.SetInt(highScoreKey, highScore);
+        
         ChangeGameState(GameState.Ended);
         GameEnded?.Invoke();
     }
     public void AddScore(int amount, Entity relatedEntity = null)
     {
         var previousScore = score;
-        score += amount;
+        //score += amount;
         //InGamePanel.instance.UpdateScore(score, previousScore);
 
         if (relatedEntity != null) { 
@@ -130,8 +135,8 @@ public class Controller : Singleton<Controller>
 
                         ScoreBubbleSpawner.instance.SpawnScoreBubble(relatedEntity.scoreBubbleSpawnTransform.position, color, () => {
 
-                            //score += 1;
-                            InGamePanel.instance.UpdateScore(previousScore+1, previousScore);
+                            score += 1;
+                            InGamePanel.instance.UpdateScore(score, previousScore);
                         });
 
                     });
@@ -142,12 +147,12 @@ public class Controller : Singleton<Controller>
                 for (int i = 0; i < -amount; i++)
                 {
                     var pos = relatedEntity.scoreBubbleSpawnTransform.position;
-                    DOVirtual.DelayedCall(i * 0.005f + 0.005f, () =>
+                    DOVirtual.DelayedCall(i * 0.05f + 0.05f, () =>
                     {
                         ScoreBubbleSpawner.instance.SpawnNegativeScoreBubble(pos, Color.red, () => {
 
-                            //score -= 1;
-                            InGamePanel.instance.UpdateScore(previousScore-1, previousScore);
+                            score -= 1;
+                            InGamePanel.instance.UpdateScore(score, previousScore);
                         });
 
                     });

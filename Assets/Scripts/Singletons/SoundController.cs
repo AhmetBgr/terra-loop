@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Audio;
+using UnityEngine.Timeline;
 
 [RequireComponent(typeof(AudioSource))]
 public class SoundController : Singleton<SoundController>
@@ -19,12 +21,14 @@ public class SoundController : Singleton<SoundController>
     public SoundEffect entityFall;
     public SoundEffect levelComplete;
 
-
+    AudioMixerGroup master;
 
     protected override void Awake()
     {
         base.Awake();
+        var audioSource = GetComponent<AudioSource>();
         _audioSources.Add(GetComponent<AudioSource>());
+        master = audioSource.outputAudioMixerGroup;
 
     }
     private void OnDestroy()
@@ -120,6 +124,7 @@ public class SoundController : Singleton<SoundController>
     private AudioSource GetNewAudioSource()
     {
         AudioSource newAudioSource = gameObject.AddComponent<AudioSource>();
+        newAudioSource.outputAudioMixerGroup = master;
         _audioSources.Add(newAudioSource);
         newAudioSource.playOnAwake = false;
 

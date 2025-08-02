@@ -55,7 +55,7 @@ public class Meteor : Entity
         {
             Debug.Log("here");
             Vector2 dir = (Earth.instance.transform.position - transform.position).normalized; 
-            rb.AddForce(dir * 0.3f);
+            rb.AddForce(dir * 0.25f);
         }
 
     }
@@ -95,13 +95,22 @@ public class Meteor : Entity
 
         DestroyEntity();
     }
+    public override void DestroyEntity()
+    {
+        Earth.instance.entities.Remove(this);
 
+        var particle = ParticleSpawner.instance.SpawnParticle(ParticleSpawner.instance.destoryPrefab2, transform.position);
+
+        particle.transform.parent = Earth.instance.transform;
+
+        Destroy(parent.gameObject);
+    }
     public void Move(Vector3 targetPos)
     {
         parent = transform.parent;
 
-        rb.AddForce((targetPos - transform.position).normalized * Random.Range(70, 130));
-        moveTween = DOVirtual.DelayedCall(20f, () => { DestroyEntity(); });
+        rb.AddForce((targetPos - transform.position).normalized * Random.Range(10, 30));
+        moveTween = DOVirtual.DelayedCall(40f, () => { DestroyEntity(); });
         //moveTween = parent.DOMove(targetPos, 10f)/*.OnComplete(() => DestroyEntity())*/;
     }
     public override void CheckForDestroy(Collider2D other)

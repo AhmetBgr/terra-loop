@@ -19,7 +19,7 @@ public class EntityQueue : MonoBehaviour
     {
         //UpdateEntityPositions();
 
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < 2; i++)
         {
             SpawnEntity();
         }
@@ -49,10 +49,12 @@ public class EntityQueue : MonoBehaviour
         {
             var entityParent = entities[i];
 
-            Vector3 pos = Vector3.left * i * 0.2f;
-            pos += i != 0 ?  Vector3.left * 0.3f : Vector3.zero;
+            Vector3 pos = Vector3.up * i * 0.1f;
+            pos += i != 0 ?  Vector3.up * 0.15f : Vector3.zero;
             entityParent.transform.DOKill();
             entityParent.transform.DOLocalMove(pos, 0.25f);
+            entityParent.transform.DOScale(1f, 0.2f);
+
         }
 
         //var entity2 = entities[0];
@@ -64,18 +66,20 @@ public class EntityQueue : MonoBehaviour
         int humanCheck = Random.Range(0, 11);
 
         GameObject entityPrefab = humanPrefab;
-        if (humanCheck <= 3)
+        if (humanCheck <= 2)
         {
             entityPrefab = otherEntityPrefabs[Random.Range(0, otherEntityPrefabs.Length)];
 
         }
 
         GameObject entityGO = Instantiate(entityPrefab, transform);
-        Vector3 pos = Vector3.left * entities.Count * 0.2f;
-        pos += entities.Count != 0 ? Vector3.left * 0.3f : Vector3.zero;
+        Vector3 pos = Vector3.up * entities.Count * 0.2f;
+        pos += entities.Count != 0 ? Vector3.up * 0.3f : Vector3.zero;
         entityGO.transform.localPosition = pos;
         entities.Add(entityGO.GetComponent<Rigidbody2D>());
 
+        entityGO.transform.localScale = Vector3.zero;
+        entityGO.transform.DOScale(1f, 0.2f);
         UpdateEntityPositions();
     }
 }

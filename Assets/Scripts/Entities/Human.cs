@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.UI;
 using UnityEngine;
 
 public class Human : Entity
@@ -12,12 +11,18 @@ public class Human : Entity
     }
     protected override void OnDestroy()
     {
+
         base.OnDestroy();
 
         if (!isPlaced)
             return;
 
         Controller.instance.AddScore(-1, this);
+    }
+
+    public override void DestroyEntity()
+    {
+        base.DestroyEntity();
     }
     protected override void OnTriggerEnter2D(Collider2D other)
     {

@@ -380,6 +380,8 @@ MonoBehaviour:
   rb: {fileID: 2321039368721011230}
   rangeTransform: {fileID: 5587326203630120862}
   scoreBubbleSpawnTransform: {fileID: 1195172923093756919}
+  fallSFX: {fileID: 11400000, guid: 31aa4bc2baac74942acad5c3981aa9a7, type: 2}
+  destroyedSFX: {fileID: 11400000, guid: 4cbaedb135b872d43a13b94cd8cc4cb8, type: 2}
   color: {r: 0.36041078, g: 1, b: 0.23113209, a: 1}
   isActive: 1
   parent: {fileID: 0}

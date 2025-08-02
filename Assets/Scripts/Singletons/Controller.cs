@@ -24,7 +24,9 @@ public class Controller : Singleton<Controller>
 
     public float buildingRange = 0.3f;
     public float treeRange = 0.2f;
-    public float remainingTime = 5f;
+    public float remainingTime = 120f;
+    public int moveCount = 100;
+
 
     public static event Action GameEnded;
 
@@ -35,7 +37,7 @@ public class Controller : Singleton<Controller>
 
         score = 0;
         InGamePanel.instance.UpdateScore(0, 0);
-        InGamePanel.instance.UpdateTimer(remainingTime);
+        InGamePanel.instance.UpdateTimer(moveCount);
     }
 
     private void OnDestroy()
@@ -54,15 +56,10 @@ public class Controller : Singleton<Controller>
         {
             remainingTime -= Time.deltaTime;
 
-            InGamePanel.instance.UpdateTimer(remainingTime);
+            //InGamePanel.instance.UpdateTimer(remainingTime);
             yield return null;
         }
-        PlayerPrefs.SetInt(scoreKey, score);
-        int highScore = PlayerPrefs.GetInt(highScoreKey, 0);
-        PlayerPrefs.SetInt(highScoreKey, score > highScore ? score: highScore);
-
-        ChangeGameState(GameState.Ended);
-        GameEnded?.Invoke();
+        EndGame();
     }
     public int GetHighScore()
     {
@@ -80,27 +77,44 @@ public class Controller : Singleton<Controller>
         }
 
         if (gameState == GameState.WaitingToStart) {
-            StartTimer();
+            //StartTimer();
             ChangeGameState(GameState.Playing);
         }
 
         if (Controller.instance.gameState != GameState.Playing) return;
 
+        if (moveCount <= 0) return;
 
         var entity = EntityQueue.GetNextEntity();
 
         if (entity == null) return;
 
         entity.MoveDown(targetTransform.position, moveDownspeed);
+        moveCount--;
+
+        InGamePanel.instance.UpdateTimer(moveCount);
+
+        if(moveCount == 0)
+        {
+            EndGame();
+        }
 
     }
 
+    public void EndGame()
+    {
+        PlayerPrefs.SetInt(scoreKey, score);
+        int highScore = PlayerPrefs.GetInt(highScoreKey, 0);
+        PlayerPrefs.SetInt(highScoreKey, score > highScore ? score : highScore);
 
+        ChangeGameState(GameState.Ended);
+        GameEnded?.Invoke();
+    }
     public void AddScore(int amount, Entity relatedEntity = null)
     {
         var previousScore = score;
         score += amount;
-        InGamePanel.instance.UpdateScore(score, previousScore);
+        //InGamePanel.instance.UpdateScore(score, previousScore);
 
         if (relatedEntity != null) { 
             relatedEntity.ScoreAdded += amount;
@@ -114,7 +128,11 @@ public class Controller : Singleton<Controller>
                     DOVirtual.DelayedCall(i * 0.1f + 0.3f, () =>
                     {
 
-                        ScoreBubbleSpawner.instance.SpawnScoreBubble(relatedEntity.scoreBubbleSpawnTransform.position, color);
+                        ScoreBubbleSpawner.instance.SpawnScoreBubble(relatedEntity.scoreBubbleSpawnTransform.position, color, () => {
+
+                            //score += 1;
+                            InGamePanel.instance.UpdateScore(previousScore+1, previousScore);
+                        });
 
                     });
                 }
@@ -126,7 +144,11 @@ public class Controller : Singleton<Controller>
                     var pos = relatedEntity.scoreBubbleSpawnTransform.position;
                     DOVirtual.DelayedCall(i * 0.005f + 0.005f, () =>
                     {
-                        ScoreBubbleSpawner.instance.SpawnNegativeScoreBubble(pos, Color.red);
+                        ScoreBubbleSpawner.instance.SpawnNegativeScoreBubble(pos, Color.red, () => {
+
+                            //score -= 1;
+                            InGamePanel.instance.UpdateScore(previousScore-1, previousScore);
+                        });
 
                     });
                 }

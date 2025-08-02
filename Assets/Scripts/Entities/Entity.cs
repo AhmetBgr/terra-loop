@@ -20,11 +20,16 @@ public class Entity : MonoBehaviour
     public Rigidbody2D rb;
     public Transform rangeTransform;
     public Transform scoreBubbleSpawnTransform;
+    public SoundEffect fallSFX;
+    public SoundEffect destroyedSFX;
+
     public Color color;
     public bool isActive = true;
     public Transform parent;
     private Transform moveTowardsTarget = null;
     public Collider2D col;
+
+
 
     public int ScoreAdded = 0;
     protected bool isPlaced = false;
@@ -72,19 +77,23 @@ public class Entity : MonoBehaviour
             parent.DOScale(Vector3.zero, 0.5f)
                 .SetEase(Ease.InBack)
                 .OnComplete(() => {
-                    DestroyEntity();
+                    //DestroyEntity();
                 });
         }
     }
-    public void DestroyEntity()
+    public virtual void DestroyEntity()
     {
+        SoundController.instance.PlayAudio(destroyedSFX);
+
         Earth.instance.entities.Remove(this);
+
+        ParticleSpawner.instance.SpawnParticle(ParticleSpawner.instance.destoryPrefab1, transform.position);
 
         Destroy(parent.gameObject);
     }
     public virtual void CheckForDestroy(Collider2D other)
     {
-        Destroy(parent.gameObject);
+        DestroyEntity();
     }
 
     public void MoveDown(Vector3 position, float speed)
@@ -101,7 +110,7 @@ public class Entity : MonoBehaviour
             Earth.instance.AddEntity(this);
             OnReachedEarth(entityType);
         });
-
+        SoundController.instance.PlayAudio(fallSFX); 
         //rb.AddForce(Vector2.down * speed, ForceMode2D.Force);
         col.enabled = true;
 
@@ -112,6 +121,8 @@ public class Entity : MonoBehaviour
         isPlaced = true;
         ReachedEarth?.Invoke(entityType);
         PlayRangeEffect();
+        //SoundController.instance.PlayAudio(SoundController.instance.entityPlaced);
+
     }
     public void MoveTowards(Transform entityParent, float delay = 0f,UnityAction onComplete = null)
     {

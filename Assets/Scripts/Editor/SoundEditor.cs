@@ -19,7 +19,7 @@ public class SoundEditor : Editor {
         if (sound.useRandomPitch)
             sound.pitchRandom = EditorGUILayout.Vector2Field("Random Pitch", sound.pitchRandom);
         else
-            sound.pitch = EditorGUILayout.Slider("Pitch", sound.pitch, leftValue: -3, rightValue: 3);
+            sound.pitch = EditorGUILayout.Slider("Pitch", sound.pitch, leftValue: -5, rightValue: 5);
 
         if (GUILayout.Button("Play")) {
             sound.PlayPreview();

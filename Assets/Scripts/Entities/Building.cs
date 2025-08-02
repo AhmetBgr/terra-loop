@@ -52,6 +52,7 @@ public class Building : Entity
             window.color = lightOn;
 
             human.parent.parent = parent;
+            Debug.LogWarning("here2");
             human.parent.gameObject.SetActive(false);
         });
 

@@ -9,6 +9,15 @@ public class SoundController : Singleton<SoundController>
     private List<AudioSource> _audioSources = new List<AudioSource>();
     private bool _isOn = true;
 
+    public SoundEffect scoreLose;
+    public SoundEffect scoreGain;
+    public SoundEffect scoreRegister;
+    public SoundEffect meteorImpact;
+    public SoundEffect entityDestroyed;
+    public SoundEffect entityPlaced;
+    public SoundEffect entityFall;
+
+
     protected override void Awake()
     {
         base.Awake();

@@ -2,6 +2,7 @@ using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class ScoreBubbleSpawner : Singleton<ScoreBubbleSpawner>
 {
@@ -36,7 +37,7 @@ public class ScoreBubbleSpawner : Singleton<ScoreBubbleSpawner>
     }
     */
 
-    public void SpawnScoreBubble(Vector3 spawnPosition, Color color)
+    public void SpawnScoreBubble(Vector3 spawnPosition, Color color, UnityAction onComplete = null)
     {
         if (scoreBubblePrefab == null) return;
 
@@ -46,9 +47,12 @@ public class ScoreBubbleSpawner : Singleton<ScoreBubbleSpawner>
 
         bubbleSprite.color = color;
 
-        MoveInArc2(bubble, targetTransform.position);
+        MoveInArc2(bubble, targetTransform.position, onComplete);
+
+        SoundController.instance.PlayAudio(SoundController.instance.scoreGain);
+
     }
-    public void SpawnNegativeScoreBubble(Vector3 spawnPosition, Color color)
+    public void SpawnNegativeScoreBubble(Vector3 spawnPosition, Color color, UnityAction onComplete = null)
     {
         if (scoreBubblePrefab == null) return;
 
@@ -58,7 +62,9 @@ public class ScoreBubbleSpawner : Singleton<ScoreBubbleSpawner>
 
         bubbleSprite.color = color;
 
-        MoveInArc2(bubble, targetTransform.position);
+        MoveInArc2(bubble, targetTransform.position, onComplete);
+
+        //SoundController.instance.PlayAudio(SoundController.instance.scoreLose);
     }
 
 
@@ -80,7 +86,7 @@ public class ScoreBubbleSpawner : Singleton<ScoreBubbleSpawner>
             .OnComplete(() => Destroy(item.gameObject));
     }
 
-    void MoveInArc2(Transform item, Vector3 endPos)
+    void MoveInArc2(Transform item, Vector3 endPos, UnityAction onComplete = null)
     {
         float arcHeight = 0.2f;
         float duration = 1f;
@@ -92,11 +98,15 @@ public class ScoreBubbleSpawner : Singleton<ScoreBubbleSpawner>
         Ease yEase = item.transform.position.x > 0 ? Ease.InExpo : Ease.OutExpo;
 
         Sequence arcSeq = DOTween.Sequence();
-        arcSeq.Append(item.DOMoveY(endPos.y, duration).SetEase(Ease.OutSine));
-        arcSeq.Join(item.DOMoveX(endPos.x, duration).SetEase(Ease.InCubic));
+        arcSeq.Append(item.DOMoveY(endPos.y, duration).SetEase(Ease.InCubic));
+        arcSeq.Join(item.DOMoveX(endPos.x, duration).SetEase(Ease.OutSine));
         //arcSeq.Append(item.DOMoveY(endPos.y, duration / 2).SetEase(Ease.InQuad));
 
         arcSeq/*.SetEase(Ease.InCubic)*/
-            .OnComplete(() => Destroy(item.gameObject));
+            .OnComplete(() => {
+                onComplete?.Invoke();
+                SoundController.instance.PlayAudio(SoundController.instance.scoreRegister);
+                Destroy(item.gameObject);
+            });
     }
 }

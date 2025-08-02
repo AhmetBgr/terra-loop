@@ -14,7 +14,7 @@ public class SoundEffect : ScriptableObject {
     [HideInInspector] public Vector2 volumeRandom = new Vector2(0.5f, 0.5f);
 
     [HideInInspector] public bool useRandomPitch;
-    [Range(-3f, 3f)]
+    [Range(-5f, 5f)]
     [HideInInspector] public float pitch = 1f;
     [HideInInspector] public Vector2 pitchRandom = new Vector2(1, 1);
 

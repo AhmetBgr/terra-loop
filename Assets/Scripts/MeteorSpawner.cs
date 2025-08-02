@@ -2,7 +2,6 @@ using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditor.Progress;
 
 public class MeteorSpawner : MonoBehaviour
 {
@@ -15,6 +14,17 @@ public class MeteorSpawner : MonoBehaviour
     void Start()
     {
         StartSpawnLoop();
+        Controller.GameEnded += OnGameEnded;
+    }
+    private void OnDestroy()
+    {
+        Controller.GameEnded -= OnGameEnded;
+
+    }
+
+    private void OnGameEnded()
+    {
+        StopAllCoroutines();
     }
 
     public void StartSpawnLoop()
@@ -23,7 +33,7 @@ public class MeteorSpawner : MonoBehaviour
     }
     private IEnumerator SpawnLoop()
     {
-        yield return new WaitForSeconds(Random.Range(5, 50));
+        yield return new WaitForSeconds(Random.Range(10, 50));
 
         Transform meteor = Instantiate(meteorPrefab, GetRandomSpawnPosition(spawnBoxes), Quaternion.identity).transform; 
 

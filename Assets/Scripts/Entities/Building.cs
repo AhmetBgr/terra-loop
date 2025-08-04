@@ -66,8 +66,8 @@ public class Building : Entity
             humansInProgress.Remove(human);
             Earth.instance.entities.Remove(human);
 
-            if (windows.Count == 0)
-                isActive = false;
+            //if (windows.Count == 0)
+                //isActive = false;
 
         });
 

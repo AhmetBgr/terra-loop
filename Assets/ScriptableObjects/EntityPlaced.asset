@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: EntityPlaced
   m_EditorClassIdentifier: 
   clips:
-  - {fileID: 8300000, guid: 0e6f8125038d84b439e77eb1c0005b94, type: 3}
+  - {fileID: 8300000, guid: bab86b9d7057c0a4e81954f636559ab9, type: 3}
   useRandomVolume: 0
-  volume: 1
+  volume: 0.5
   volumeRandom: {x: 0.5, y: 0.5}
   useRandomPitch: 1
   pitch: 1

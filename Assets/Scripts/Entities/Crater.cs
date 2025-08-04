@@ -49,6 +49,7 @@ public class Crater : Entity
             Controller.instance.AddScore(50, this);
             meteorite.SetActive(false);
             isActive = false;
+            col.enabled = false;
         }
     }
 }

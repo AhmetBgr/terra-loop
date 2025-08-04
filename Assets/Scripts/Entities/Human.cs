@@ -40,6 +40,9 @@ public class Human : Entity
         Entity closestbuilding = null;
         foreach (var entity in nearbyEntities)
         {
+
+            if ((entity as Building).windows.Count == 0) continue;
+                 
             if (closestbuilding == null || Vector2.Distance(entity.transform.position, transform.position) < Vector2.Distance(closestbuilding.transform.position, transform.position))
             {
                 closestbuilding = entity;

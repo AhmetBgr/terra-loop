@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Tree : Entity
 {
+    public bool pointsAdded = false;
     public override void OnReachedEarth(EntityType type)
     {
         base.OnReachedEarth(type);
@@ -20,7 +21,7 @@ public class Tree : Entity
     {
         base.OnDestroy();
 
-        if (!isPlaced)
+        if (!isPlaced /*|| !pointsAdded*/)
             return;
 
         var nearbyEntities = Earth.instance.GetNearbyEntities(transform.position, Controller.instance.buildingRange, EntityType.Building);

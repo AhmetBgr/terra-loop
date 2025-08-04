@@ -45,13 +45,10 @@ public class Earth : Singleton<Earth>
         if (Input.GetMouseButtonDown(1))
         {
             rotationSpeed = speedupRotationSpeed;
-            Debug.Log("here: " + rotationSpeed);
 
         }
         if (Input.GetMouseButtonUp(1))
         {
-            Debug.Log("here2");
-
             rotationSpeed = defRotationSpeed;
         }
         

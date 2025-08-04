@@ -152,6 +152,9 @@ public class Controller : Singleton<Controller>
                         ScoreBubbleSpawner.instance.SpawnNegativeScoreBubble(pos, Color.red, () => {
 
                             score -= 1;
+
+                            score = score < 0 ? 0 : score;  
+
                             InGamePanel.instance.UpdateScore(score, previousScore);
                         });
 
